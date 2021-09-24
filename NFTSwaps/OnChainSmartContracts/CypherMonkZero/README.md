@@ -5,4 +5,4 @@ CypherMonkZero is the first NFT in the CypherMonks series and is an exclusive NF
 ## Off-Chain Applications
 
 Following are the applications which support interacting with this smart contract:
-- [PythonScripts](https://github.com/MadeWithLovelace/CypherMonks/tree/main/NFTSwaps/OffChainApps/Python): depositNFT.py (the "seller"), swapforADA.py (the "buyer") (dependencies: transaction.py)
+- [PythonScripts](https://github.com/MadeWithLovelace/CypherMonks/tree/main/NFTSwaps/OffChainApps/Python): swapIN.py (NFT owner deposits the NFT for a swap), swapOUT.py (other party swaps preset amount of ADA for the NFT) (dependencies: transaction.py)

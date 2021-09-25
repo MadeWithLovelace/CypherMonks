@@ -1,6 +1,6 @@
 cabal-version: 2.4
 
-name:                   SwapNFT
+name:                   swapnft
 version:                1.29.0
 description:            A plutus smartcontract for swapping Cardano NFTs for ADA
 author:                 MadeWithLovelace; CypherMonks.com

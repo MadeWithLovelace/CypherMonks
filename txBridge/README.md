@@ -1,4 +1,4 @@
-# SmartContract Bridge
+# SmartContract & TX Bridge
 This is a "bridge" of sorts between an "average user" and a Smart Contract. It allows for a user to simply pay an agreed-upon amount to an agreed-upon Cardano address and the "bridge" scripts will interact with the Smart Contract on the user's behalf. 
 
 This is admittedly a "quick and dirty" technique for bridging interaction between a user and a smart contract, wherein the user does not need to build any specific type of transaction or include datum, etc. They can send an amount to an address and engage the smart contract.

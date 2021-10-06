@@ -249,8 +249,6 @@ def check_for_payment(tmp, api_id, wallet_addr, amount, sender_addr = 'none', wh
         if not is_whitelist_file:
             print("\nMissing expected file: whitelist.txt in this same folder!\n")
             exit(0)
-        print("whitelist file path: " + whitelist_file + "\n")
-    print("outcome of compare flag: " + str(compare_addr) + "\n")
     if not is_log_file:
         try:
             open(payments_file, 'x')
@@ -273,33 +271,22 @@ def check_for_payment(tmp, api_id, wallet_addr, amount, sender_addr = 'none', wh
     utxoTableRows = rawUtxoTable.strip().splitlines()
     
     # Foreach row compare against each line of tx file
-    #print("\n ----------- Start Iterating!! ----------- \n")
-    tempiit = 0
-    tempoit = 0
-    tempait = 0
     for x in range(2, len(utxoTableRows)):
         cells = utxoTableRows[x].split()
         tx_hash = cells[0].decode('utf-8')
-        #print("\nIteration for found UTxO TX Hash: " + tx_hash)
         payments_r = open(payments_file, 'r')
         flag = 0
         index = 1
         # Foreach line of the file
         for line in payments_r:
-            #ishash = line[0]
-            #print("\nChecking file line " + str(index))
             index += 1
             if tx_hash in line:
-                #print("\nFound TxHash in file! Setting flag=1, closing read file, and breaking file-line foreach to get to IF statements\n")
                 flag = 1
                 payments_r.close()
                 break
-        #print("\nAbout to run IF statements\n")
         if flag == 1:
-            print("\nFLAG=1 - Found Matching, Not ReRecording\n")
             continue
         if flag == 0:
-            #print("\nFLAG=0 - TxHash NOT found, appending to file, closing both files, and continuing to next UTxO\n")
             with open(payments_file, 'a') as payments_a:
                 # Get curl data from blockfrost on new tx's only
                 headers = {'project_id': api_id}

@@ -1,5 +1,4 @@
 #!/usr/bin/python
-
 import os
 import subprocess
 import json
@@ -232,7 +231,7 @@ def log_new_txs(tmp, wallet_addr):
     #print("\n ----------- Finished iterating!! ----------- \n")
     return txcount
     
-def check_for_payment(tmp, api_id, wallet_addr, amount, sender_addr = 'false'):
+def check_for_payment(tmp, api_id, wallet_addr, amount, sender_addr = 'none', whitelist_onetime = True):
     """
     Checks for an expected amount of ADA from any address in a whitelist (or specific passed) and maintains a log of expected and any other present UTxO payments at tmp/payments.log
     """
@@ -240,14 +239,14 @@ def check_for_payment(tmp, api_id, wallet_addr, amount, sender_addr = 'false'):
     payments_file = tmp + 'payments.log'
     is_log_file = os.path.isfile(payments_file)
     compare_addr = 1
-    is_payment = 'false'
-    if sender_addr == 'false':
+    record_as_payment = False
+    if sender_addr == 'none':
         compare_addr = 0
-    if sender_addr == 'true':
+    if sender_addr == 'whitelist':
         compare_addr = 2
-        whitelist_file = os.path.join(os.path.realpath(os.path.dirname(__file__)), 'whitelist.txt')
-        is_whitelist_file = os.path.isfile(payments_file)
-        if not iswhitelist_file:
+        whitelist_file = os.path.join(os.path.realpath(os.path.dirname(__file__)), sender_addr + '.txt')
+        is_whitelist_file = os.path.isfile(whitelist_file)
+        if not is_whitelist_file:
             print("\nMissing expected file: whitelist.txt in this same folder!\n")
             exit(0)
         print("whitelist file path: " + whitelist_file + "\n")
@@ -275,6 +274,9 @@ def check_for_payment(tmp, api_id, wallet_addr, amount, sender_addr = 'false'):
     
     # Foreach row compare against each line of tx file
     #print("\n ----------- Start Iterating!! ----------- \n")
+    tempiit = 0
+    tempoit = 0
+    tempait = 0
     for x in range(2, len(utxoTableRows)):
         cells = utxoTableRows[x].split()
         tx_hash = cells[0].decode('utf-8')
@@ -312,10 +314,12 @@ def check_for_payment(tmp, api_id, wallet_addr, amount, sender_addr = 'false'):
                     continue
                 
                 for tx_data in tx_result.json()['inputs']:
+                    tempiit += 1
+                    print("\ninputs iteration: " + str(tempiit))
                     from_addr = tx_data['address']
                     matched_tx = tx_data['tx_hash']
                     if compare_addr == 1 and from_addr == sender_addr:
-                        record_as_payment = TRUE
+                        record_as_payment = True
                     if compare_addr == 2:
                         whitelist_r = open(whitelist_file, 'r')
                         windex = 0
@@ -325,23 +329,45 @@ def check_for_payment(tmp, api_id, wallet_addr, amount, sender_addr = 'false'):
                             windex += 1
                             if from_addr in wline:
                                 #print("\nFound Whitelisted Address in file! Setting wflag=1, closing read file, and breaking file-line foreach to get to IF statements\n")
-                                record_as_payment = TRUE
-                                whitelist_r.close()
+                                record_as_payment = True
+                                if whitelist_onetime:
+                                    whitelist_r.close()
+                                    clean_wlws = from_addr
+                                    
+                                    with open(whitelist_file,'r') as read_file:
+                                        lines = read_file.readlines()
+                                    currentLine = 0
+                                    with open(whitelist_file,'w') as write_file:
+                                        for line in lines:
+                                            if line.strip('\n') != clean_wlws:
+                                                write_file.write(line)
+                                    read_file.close()
+                                    write_file.close()
+
                                 break
                                 #print("\nAbout to run IF statements\n")
                     
                     #print("\nSenders Address Whitelisted! Matching up to amount tx...and recording TX\n")
+                    
                     for output in tx_result.json()['outputs']:
+                        tempoit += 1
+                        print("\noutput iteration: " + str(tempoit))
                         if output['address'] == wallet_addr:
+                            is_payment = 'false'
+                            
+                            
                             for amounts in output['amount']:
+                                tempait += 1
                                 #print("\nRaw: "+amounts['quantity'])
+                                print("\namounts iteration: " + str(tempait))
                                 if amounts['unit'] == 'lovelace' and amounts['quantity'] == str(amount):
                                     if compare_addr == 0 or record_as_payment:
+                                        print("\ncompare = 0 or recordaspay\n")
                                         is_payment = 'true'
                                 if amounts['unit'] == 'lovelace':
                                     pay_amount = amounts['quantity']
-                                payments_a.write(tx_hash + ',' + from_addr + ',' + str(pay_amount) + ',' + matched_tx + ',' + is_payment + '\n')
-                                print("\nFound amount-matched transaction hash: "+matched_tx+"\n")
+                                    payments_a.write(tx_hash + ',' + from_addr + ',' + str(pay_amount) + ',' + matched_tx + ',' + is_payment + '\n')
+                                    print("\nFound amount-matched transaction hash: "+matched_tx+"\n")
                         else:
                             print("\nNo Matching Address Located\n")
                 print("\nDone\n")

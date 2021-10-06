@@ -10,3 +10,5 @@ For simple NFT sales and transfers, for native token distribution (with or witho
 
 ## Notes
 Still in infancy and not complete yet.
+
+The bridge script will check for a new payment matching the price and "from" address expected via the variables, if it detects one it will return true and initiate the NFT smart contract transfer to the buyer.

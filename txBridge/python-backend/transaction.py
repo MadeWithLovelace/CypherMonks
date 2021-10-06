@@ -11,7 +11,7 @@ import requests
 # If you are using mainnet, do a find/replace for all: '--testnet-magic', '1097911063'   and change to simply: '--mainnet'
 # Script Assumes CARDANO_NODE_SOCKET_PATH=/path/to/wherever/is/the/node.socket is set in your system path, if not do so before running
 
-cardano_cli = "/home/ulla/node/result/alonzo-purple/cardano-cli/bin/cardano-cli"
+cardano_cli = "/home/user/cardano-cli/bin/cardano-cli"
 api_url = "https://cardano-testnet.blockfrost.io/api/v0/"
 
 def get_address_from_vkey(vkey_path):

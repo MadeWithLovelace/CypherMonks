@@ -11,6 +11,8 @@ Each compiled smart contract (aka Cardano Plutus script) and accompanying source
 
 This folder contains supporting applications or scripts to be used "off-chain" to interact with On-Chain NFT-swap smart contracts. Each NFT folder contains a README.md file that lists the applications which can be used for that particular smart contract.
 
+Alternatively, one could use the Smart Contract Gateway application or something similar. We are developing the Smart Contract Gateway in MadeWithLovelace under its own repository.
+
 ## Using Applications
 
 At this time we simply have two Python scripts, originally adapted from [logicalmechanism](https://github.com/logicalmechanism/Token-Sale-Plutus-Contract). These have been modified, updated, and tested carefully but should still be considered "Use at your own risk" and the source code should be verified before using. 

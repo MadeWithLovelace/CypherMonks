@@ -2,6 +2,8 @@
 ## NFT #2
 October 12, 2021 our auction ended for NFT The Beginning and we later finalized the purchase with our winning bidder utilizing a Cardano smart contract (plutus script). We've added the script source code here in an effort to keep all CypherMonks transactions completely open source, verifiable, and transparent.
 
+The Smart Contract public address is: addr1w8pxjleddvgmh43j3at0df5k6fqzg2z386lv7myg6m3wgesgag0d5
+
 In interacting with the smart contract we used our Smart Contract Gateway application, the source of which will be available in the MadeWithLovelace organization under its own repository.
 
 ## Auction Details

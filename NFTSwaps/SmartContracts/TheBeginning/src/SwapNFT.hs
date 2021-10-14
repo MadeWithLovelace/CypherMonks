@@ -76,8 +76,8 @@ typedValidator swap = Scripts.mkTypedValidator @Typed
 
 validator :: Plutus.Validator
 validator = Scripts.validatorScript (typedValidator swap)
-    where swap = SwapParams { swapOwnerAddr = pubKeyHashAddress "ff413fb331a64930414bf07e7106a0488579d5329755d23c9ac0af49"
-                            , swapLovelace = 105000000
+    where swap = SwapParams { swapOwnerAddr = pubKeyHashAddress "REPLACE_WITH_YOUR_ADDRESS_PUBKEY_HASH"
+                            , swapLovelace = 105000000 -- Update to the lovelace amount required
                             }
 
 script :: Plutus.Script
